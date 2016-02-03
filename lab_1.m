@@ -7,6 +7,8 @@ c.pixelclock = 7;
 c.aoi = [0 0 1280 1024];
 c.exposure = 120;
 
+define_aoi(c);
+c.aoi
 if ~exist('imgs','var')
     imgs = capture_images(c, 51);
 end
@@ -26,7 +28,7 @@ for e=1:length(es)
     c.exposure = es(e);
     eimgs = capture_images(c, 100);
     means(e) = mean(eimgs(:));
-    vars(e,1) = var(eimgs(:));
+    vars(e) = var(eimgs(:));
 end
 
 figure;
@@ -35,3 +37,4 @@ plot(es, means);
 figure;
 title('Variance vs. Exposure time');
 plot(es, vars);
+
