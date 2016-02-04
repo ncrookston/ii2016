@@ -1,4 +1,4 @@
-classdef MockCamera
+classdef MockCamera < handle
     properties (Access = private)
         I
     end
@@ -6,36 +6,37 @@ classdef MockCamera
         capture
     end
     properties
-        pixelclock = 10
-        framerate = 10
-        exposure = 10
+        pixelclock = 24
+        framerate = 8.0196
+        exposure = 7
         aoi = [0 0 1280 1024]
+        pausetime = 0
     end
     properties(Constant)
-        allowedpixelclock = [7 1 50]
-        exposurerange = [1 10 101]
-        frameraterange = [10 20]
+        allowedpixelclock = uint32(7:68)'
+        exposurerange = [.009 .0549 66.6209]
+        frameraterange = [.5 17.2889]
     end
     methods (Access = private)
         function img = subimage(obj, I)
             a = obj.aoi;
-            img = I(a(1)+1:a(1)+a(4),a(2)+1:a(2)+a(3));
+            img = I(a(1)+1:a(1)+a(3),a(2)+1:a(2)+a(4));
 %            img = reshape(img,1,size(img,1), size(img,2));
         end
     end
     methods
         function obj = MockCamera(~,~)
             if nargin <= 1
-                obj.I = rgb2gray(imread('saturn.png'))';
+                obj.I = rgb2gray(imread('saturn.png'));
             else
-                obj.I = zeros(obj.aoi(4), obj.aoi(3));
+                obj.I = zeros(obj.aoi(3), obj.aoi(4));
             end
         end
         function img = get.capture(obj)
-            img = imnoise(obj.subimage(obj.I), 'gaussian');
+            img = imnoise(obj.subimage(obj.I), 'poisson');
         end
         
-        function delete(obj)
+        function delete(~)
             %Do nothing for the mock.
         end
     end

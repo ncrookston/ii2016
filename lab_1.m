@@ -21,7 +21,6 @@ showimage(mimg, 'Offset Image');
 vimg = var(imgs,1);
 showimage(vimg, 'Variance Image');
 
-%set_centered_aoi(c, [100 100])
 c.aoi = [590 462 100 100];
 es = c.exposurerange(1):20*c.exposurerange(2):c.exposurerange(3);
 means = zeros(size(es,2),1);
@@ -32,9 +31,6 @@ for e=1:length(es)
     means(e) = mean(eimgs(:));
     vars(e) = var(eimgs(:));
 end
-
-means
-vars
 
 figure;
 title('Mean vs. Exposure time');
@@ -71,7 +67,6 @@ if strcmp(place,'all') || strcmp(place,'part2')
     plot(es, SNR(:,3));
     title('SNR vs exposure');
 
-    %save('lab1_vars.mat', 'SNR');
     c.aoi = [50 400 100 100];
 
     full_part2 = capture_images(c, 50);
